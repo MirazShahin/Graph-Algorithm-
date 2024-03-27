@@ -28,19 +28,31 @@
 using namespace std;
 using ll = long long int;
 
-///--------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>----The End----<<<<<<<<<<<<<<<<<<<<<<<<<---------------
+///--------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>----Modular Arithmetic----<<<<<<<<<<<<<<<<<<<<<<<<<---------------
 
+const  ll MOD = (ll) 1e9 + 7;
+inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
+inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
+inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
+inline ll modSub(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); a -= b; normal(a); return a; }
+inline ll modPow(ll b, ll p) { ll r = 1; while(p) { if(p&1) r = modMul(r, b); b = modMul(b, b); p >>= 1; } return r; }
+inline ll modInverse(ll a) { return modPow(a, MOD-2); }  /// When MOD is prime.
+inline ll modDiv(ll a, ll b) { return modMul(a, modInverse(b)); }
+
+///--------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>----The End----<<<<<<<<<<<<<<<<<<<<<<<<<---------------
 const int N = 1e5 + 7;
 vector<vector<int>> graph;
 vector<vector<int>> connected_component;
 vector<int> current_connected_component;
 int vis[N];
 void dfs(int vartex) {
-    current_connected_component.push_back(vartex);
     vis[vartex] = 1;
+    current_connected_component.push_back(vartex);
     for(auto child : graph[vartex]) {
+
         if(vis[child]) continue;
         dfs(child);
+
     }
 }
 ///------------------------------>>>>>---Start---<<<<<---------------------------------------------
@@ -52,11 +64,12 @@ void solve()
     for(int i = 0; i < n; i++ ) {
         int u, v;
         cin >> u >> v;
+
         graph[u].push_back(v);
         graph[v].push_back(u);
     }
     int ans = 0;
-    for(int i = 0; i < n; i++ ) {
+    for(int i = 1; i <= n; i++ ) {
         if(vis[i]) continue;
         current_connected_component.clear();
         dfs(i);
@@ -64,11 +77,13 @@ void solve()
         ans++;
     }
     cout << ans << nn;
+//    cout << sz(current_connected_component) << nn;
     for(auto u : connected_component) {
-        for(auto s : u) {
-            cout << s << sp;
-        }
-        cout << nn;
+        cout << sz(u) << sp;
+//        for(auto s : u) {
+//            cout << s << sp;
+//        }
+//        cout << nn;
     }
 
 }
